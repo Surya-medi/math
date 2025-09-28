@@ -1,0 +1,93 @@
+
+INDEX.php
+<?php
+
+// Memanggil definisi class Karyawan
+require 'Karyawan.php';
+
+echo "--- APLIKASI MANAJEMEN KARYAWAN OOP --- \n\n";
+
+// 1. Membuat Objek Karyawan Pertama
+// Menggunakan constructor untuk inisialisasi properti
+$karyawan1 = new Karyawan("Budi Santoso", "Manager", 7500000);
+
+// 2. Membuat Objek Karyawan Kedua
+$karyawan2 = new Karyawan("Siti Aminah", "Staf Administrasi", 4000000);
+
+echo "\n--- Menampilkan Detail Awal Karyawan --- \n";
+
+// 3. Memanggil Method pada Objek
+$karyawan1->tampilkanDetail();
+$karyawan2->tampilkanDetail();
+
+echo "\n--- Operasi Update Gaji (Setter) --- \n";
+
+// 4. Mengubah properti private menggunakan Setter Method
+$karyawan1->setGaji(8000000);
+
+echo "\n--- Menampilkan Detail Setelah Update --- \n";
+
+// 5. Menampilkan detail yang telah diperbarui
+$karyawan1->tampilkanDetail();
+$karyawan2->tampilkanDetail();
+
+// 6. Mengakses properti publik secara langsung (Tidak disarankan untuk gaji, tapi untuk nama/jabatan boleh)
+echo "Jabatan " . $karyawan1->nama . " saat ini adalah: " . $karyawan1->jabatan . "\n";
+
+// 7. Mencoba mengakses properti private secara langsung (akan menghasilkan error/Notice)
+// echo "Gaji Budi (akses langsung): " . $karyawan1->gajiPokok . "\n"; 
+// ^ Baris ini akan gagal karena $gajiPokok bersifat private (Enkapsulasi)
+
+echo "\nProgram selesai. Objek Karyawan akan dihancurkan. \n";
+
+?>
+
+KARYAWAN.PHP
+<?php
+
+class Karyawan {
+    // Properti/Attributes
+    public $nama;
+    public $jabatan;
+    private $gajiPokok; // Properti private untuk enkapsulasi
+
+    // Constructor: Method yang otomatis dipanggil saat objek dibuat
+    public function __construct($nama, $jabatan, $gaji) {
+        $this->nama = $nama;
+        $this->jabatan = $jabatan;
+        $this->gajiPokok = $gaji;
+        echo "Objek Karyawan baru telah dibuat untuk: " . $this->nama . "\n";
+    }
+
+    // Method untuk menampilkan detail karyawan
+    public function tampilkanDetail() {
+        echo "--------------------------\n";
+        echo "Nama: " . $this->nama . "\n";
+        echo "Jabatan: " . $this->jabatan . "\n";
+        // Mengakses method getter untuk gaji
+        echo "Gaji Pokok: Rp " . number_format($this->getGaji(), 0, ',', '.') . "\n";
+        echo "--------------------------\n";
+    }
+
+    // Getter Method (untuk mengakses properti private dari luar class)
+    public function getGaji() {
+        return $this->gajiPokok;
+    }
+
+    // Setter Method (untuk mengubah properti private dari luar class)
+    public function setGaji($gajiBaru) {
+        if ($gajiBaru > 0) {
+            $this->gajiPokok = $gajiBaru;
+            echo "Gaji " . $this->nama . " berhasil diubah menjadi Rp " . number_format($gajiBaru, 0, ',', '.') . "\n";
+        } else {
+            echo "Gaji harus positif.\n";
+        }
+    }
+    
+    // Destructor: Method yang otomatis dipanggil saat objek dihancurkan/skrip selesai
+    public function __destruct() {
+        //echo "Objek Karyawan " . $this->nama . " dihancurkan.\n";
+    }
+}
+
+?>
